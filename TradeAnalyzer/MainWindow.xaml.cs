@@ -34,7 +34,7 @@ namespace TradeAnalyzer
 
         private void BCheck_Click(object sender, RoutedEventArgs e)
         {
-            Statistics.Check();
+            StatisticsFiles.Check();
         }
 
     }

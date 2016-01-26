@@ -7,11 +7,11 @@ using Microsoft.Win32;
 
 namespace TradeAnalyzer
 {
-    public static class Statistics
+    public static class StatisticsFiles
     {
         private static readonly List <string> Files; 
 
-        static Statistics()
+        static StatisticsFiles()
         {
             Files = new List <string>();
         }
