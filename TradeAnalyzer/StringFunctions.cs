@@ -47,11 +47,7 @@ public static class StringFunctions
                     }
                     predicat = rFormat[i].ToString();
                 }
-                if (i < length - 1)
-                {
-                    
-                }
-                else
+                if (i >= length - 1)
                 {
                     SetDayMonthYear(predicat, rS, ref day, ref month, ref sYear);
                 }
