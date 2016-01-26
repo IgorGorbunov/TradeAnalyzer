@@ -12,3 +12,15 @@ D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.csproj.GenerateResource.Cache
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.exe
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.pdb
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\Microsoft.CSharp.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\Microsoft.Office.Interop.Excel.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\Office.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\PresentationCore.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\PresentationFramework.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Data.DataSetExtensions.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Data.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xaml.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xml.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xml.Linq.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WindowsBase.dll
