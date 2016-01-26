@@ -8,7 +8,7 @@ using Excel =  Microsoft.Office.Interop.Excel;
 /// <summary>
 /// Класс для работы с Excel.
 /// </summary>
-public sealed class ExcelClass
+public class ExcelClass : IDisposable
 {
     Excel.ApplicationClass _xlApp;
     Excel.Workbook _xlWorkBook;      
@@ -17,6 +17,7 @@ public sealed class ExcelClass
     Excel.Pictures _p;
     Excel.Picture _pic;
     private readonly object _misValue = Type.Missing;
+    bool _disposed;
 
 
     private const string _TEMPLATE_PATH = @"D:\USP\UchetUSP\Templates\";
@@ -470,7 +471,6 @@ public sealed class ExcelClass
             _xlWorkBook.Close(save, _misValue, _misValue);
         }
         _xlApp.Quit();
-        GC.GetTotalMemory(true);
     }
 
 
@@ -480,18 +480,6 @@ public sealed class ExcelClass
         _xlApp.Quit();
     }
 
-    //Уничтожение объекта
-    //без этого процесс висит
-    public void Dispose()
-    {
-        releaseObject(_pic);
-        releaseObject(_p);
-        releaseObject(_range);
-        releaseObject(_xlWorkSheet);
-        releaseObject(_xlWorkBook);
-        releaseObject(_xlApp);
-        GC.Collect();
-    }
 
     private void releaseObject(object obj)
     {
@@ -561,6 +549,37 @@ public sealed class ExcelClass
         _range.Select();
         _range.Insert(Excel.XlInsertShiftDirection.xlShiftDown, _misValue);
 
+    }
+
+    //Уничтожение объекта
+    //без этого процесс висит
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Protected implementation of Dispose pattern.
+    protected virtual void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            //handle.Dispose();
+            // Free any other managed objects here.
+            //
+        }
+
+        // Free any unmanaged objects here.
+        releaseObject(_pic);
+        releaseObject(_p);
+        releaseObject(_range);
+        releaseObject(_xlWorkSheet);
+        releaseObject(_xlWorkBook);
+        releaseObject(_xlApp);
+        _disposed = true;
     }
 
 }
