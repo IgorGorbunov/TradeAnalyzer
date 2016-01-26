@@ -2,7 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+
+    <DockPanel LastChildFill="False" Margin="0" Grid.Column="2">
+        <StatusBar Height="0" VerticalAlignment="Top" DockPanel.Dock="Bottom" Margin="0"/>
+        <Menu Height="22" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
+            <MenuItem x:Name="miHelp" Header="Справка" Click="miHelp_Click"/>
+        </Menu>
+    </DockPanel>
+
 </Window>

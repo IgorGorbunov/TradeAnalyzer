@@ -1,2 +1,14 @@
 C:\Users\igor\AppData\Local\Temporary Projects\TradeAnalyzer\bin\Debug\TradeAnalyzer.exe.config
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\TradeAnalyzer.exe.config
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\TradeAnalyzer.exe
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\TradeAnalyzer.pdb
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.csprojResolveAssemblyReference.cache
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\MainWindow.baml
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\MainWindow.g.cs
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\App.g.cs
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer_MarkupCompile.cache
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.g.resources
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.Properties.Resources.resources
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.csproj.GenerateResource.Cache
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.exe
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\obj\Debug\TradeAnalyzer.pdb
