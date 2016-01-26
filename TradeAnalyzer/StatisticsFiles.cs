@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Win32;
 
 namespace TradeAnalyzer
@@ -21,7 +17,8 @@ namespace TradeAnalyzer
             bool selectFiles = SetFiles();
             if (selectFiles)
             {
-                
+                TradeInstrument instrument = new TradeInstrument("CHMF", "Северсталь", Files[0]);
+                instrument.ReadAllQuotes();
             }
         }
 
