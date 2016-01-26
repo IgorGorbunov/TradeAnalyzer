@@ -34,36 +34,40 @@ public static class StringFunctions
             }
             else
             {
-                if (rFormat[i] == predicat[0] && i < length - 1)
+                if (rFormat[i] == predicat[0])
                 {
                     predicat += rFormat[i];
                 }
                 else
                 {
-                    int value = int.Parse(rS.Substring(0, predicat.Length));
-                    switch (predicat[0])
+                    SetDayMonthYear(predicat, rS, ref day, ref month, ref sYear);
+                    if (predicat.Length > 0)
                     {
-                        case DateDay:
-                            day = value;
-                            break;
-                        case DateMonth:
-                            month = value;
-                            break;
-                        case DateYear:
-                            sYear = rS.Substring(0, predicat.Length);
-                            break;
-                    }
-                    if (predicat.Length > 1)
-                    {
-                        rS = rS.Substring(predicat.Length - 1);
+                        rS = rS.Substring(predicat.Length);
                     }
                     predicat = rFormat[i].ToString();
                 }
+                if (i < length - 1)
+                {
+                    
+                }
+                else
+                {
+                    SetDayMonthYear(predicat, rS, ref day, ref month, ref sYear);
+                }
             }
+        }
+        if (sYear.Length == 1)
+        {
+            sYear = string.Format("200{0}", sYear);
         }
         if (sYear.Length == 2)
         {
             sYear = string.Format("20{0}", sYear);
+        }
+        if (sYear.Length == 3)
+        {
+            sYear = string.Format("2{0}", sYear);
         }
         int year = int.Parse(sYear);
         return new DateTime(year, month, day);
@@ -120,6 +124,22 @@ public static class StringFunctions
                 return "O";
         }
         return ss;
+    }
+
+    private static void SetDayMonthYear(string predicat, string reverseDate, ref int day, ref int month, ref string sYear)
+    {
+        switch (predicat[0])
+        {
+            case DateDay:
+                day = int.Parse(Reverse(reverseDate.Substring(0, predicat.Length)));
+                break;
+            case DateMonth:
+                month = int.Parse(Reverse(reverseDate.Substring(0, predicat.Length)));
+                break;
+            case DateYear:
+                sYear = Reverse(reverseDate.Substring(0, predicat.Length));
+                break;
+        }
     }
 }
 

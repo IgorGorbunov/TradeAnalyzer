@@ -52,7 +52,7 @@ public class TradeInstrument
                 xls.OpenDocument(_quotesFileName, false);
                 string sDate = xls.GetCellStringValue(DateCol, FirstRow);
                 int i = FirstRow;
-                while (string.IsNullOrEmpty(sDate))
+                while (!string.IsNullOrEmpty(sDate))
                 {
                     DateTime date = StringFunctions.GetDate(sDate, DateFormat);
                     if (date > fromDate && date < toDate)
@@ -69,7 +69,7 @@ public class TradeInstrument
                     sDate = xls.GetCellStringValue(DateCol, i);
                 }
             }
-            catch (Exception)
+            finally 
             {
                 xls.CloseDocument(false);
             }
