@@ -24,11 +24,17 @@ namespace TradeAnalyzer
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void miHelp_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("test");
+            Debug.WriteLine(MiHelp.Header.ToString());
+        }
+
+        private void BCheck_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }

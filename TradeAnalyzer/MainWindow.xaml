@@ -6,8 +6,13 @@
     <DockPanel LastChildFill="False" Margin="0" Grid.Column="2">
         <StatusBar Height="0" VerticalAlignment="Top" DockPanel.Dock="Bottom" Margin="0"/>
         <Menu Height="22" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
-            <MenuItem x:Name="miHelp" Header="Справка" Click="miHelp_Click"/>
+            <MenuItem x:Name="MiHelp" Header="Справка" Click="miHelp_Click"/>
         </Menu>
+        <StackPanel Height="298" VerticalAlignment="Top" Width="100"/>
+        <StackPanel Height="298" VerticalAlignment="Top" Width="100" DockPanel.Dock="Right"/>
+        <Grid Height="298" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
+            <Button x:Name="BCheck" Content="Выполнить проверку" HorizontalAlignment="Center" VerticalAlignment="Center" Width="134" Click="BCheck_Click"/>
+        </Grid>
     </DockPanel>
 
 </Window>
