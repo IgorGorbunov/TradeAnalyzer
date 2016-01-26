@@ -1,0 +1,2 @@
+C:\Users\igor\AppData\Local\Temporary Projects\TradeAnalyzer\bin\Debug\TradeAnalyzer.exe.config
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\TradeAnalyzer.exe.config
