@@ -4,7 +4,30 @@ using System.Collections.Generic;
 
 public class Deal
 {
+    public enum Direction
+    {
+        Short = 0,
+        Long = 1
+    }
+
+    public static string GetEnumStr(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Long:
+                return "ЛОНГ";
+            case Direction.Short:
+                return "шорт";
+        }
+        return "";
+    }
+
     public bool IsLong
+    {
+        get;
+        private set;
+    }
+    public Direction DirectionDeal
     {
         get;
         private set;
@@ -39,6 +62,14 @@ public class Deal
         : this (openDate, openValue)
     {
         IsLong = isLong;
+        if (isLong)
+        {
+            DirectionDeal = Direction.Long;
+        }
+        else
+        {
+            DirectionDeal = Direction.Short;
+        }
     }
 
     public Deal(string direction, DateTime openDate, double? openValue)
@@ -89,10 +120,12 @@ public class Deal
         if (title == LongTitle)
         {
             IsLong = true;
+            DirectionDeal = Direction.Long;
         }
         if (title == ShortTitle)
         {
             IsLong = false;
+            DirectionDeal = Direction.Short;
         }
     }
 
