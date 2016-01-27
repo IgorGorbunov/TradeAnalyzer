@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 public class TradeInstrument
 {
@@ -112,10 +113,10 @@ public class TradeInstrument
                             !string.IsNullOrEmpty(sOpen) &&
                             !string.IsNullOrEmpty(sReverse))
                         {
-                            double reverse = double.Parse(sReverse);
+                            double reverse = double.Parse(sReverse.Replace(",", "."), CultureInfo.InvariantCulture);
                             if (isFirstDeal)
                             {
-                                double open = double.Parse(sOpen);
+                                double open = double.Parse(sOpen.Replace(",", "."), CultureInfo.InvariantCulture);
                                 deal = new Deal(sDir, date, open);
                                 deal.SetStopReverse(date, reverse);
                                 isFirstDeal = false;
@@ -128,9 +129,9 @@ public class TradeInstrument
                                 }
                                 else
                                 {
-                                    double open = double.Parse(sOpen);
+                                    double open = double.Parse(sOpen.Replace(",", "."), CultureInfo.InvariantCulture);
                                     _deals.Add(deal.OpenDate, deal);
-                                    deal = deal.Reverse(date, open);
+                                    deal = deal.Reverse(date.AddDays(-1), open);
                                 }
                             }
                         }

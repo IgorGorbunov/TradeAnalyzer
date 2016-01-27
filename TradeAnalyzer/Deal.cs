@@ -76,11 +76,11 @@ public class Deal
         return false;
     }
 
-    public Deal Reverse(DateTime date, double closeValue)
+    public Deal Reverse(DateTime closeDate, double closeValue)
     {
-        CloseDate = date;
+        CloseDate = closeDate;
         CloseValue = closeValue;
-        return new Deal(!IsLong, date, closeValue);
+        return new Deal(!IsLong, closeDate, closeValue);
     }
 
     private void SetDirection(string dir)
