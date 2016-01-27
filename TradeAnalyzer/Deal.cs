@@ -54,6 +54,10 @@ public class Deal
         get;
         private set;
     }
+    public Dictionary <DateTime, double?> Stops
+    {
+        get { return _stops; }
+    }
 
     private readonly Dictionary <DateTime, double?> _stops;
 
