@@ -35,12 +35,23 @@ public class Deal
     private const string LongTitle = "ЛOHГ";
     private const string ShortTitle = "ШOPT";
 
-    public Deal(bool isLong, DateTime openDate, double openValue)
+    public Deal(bool isLong, DateTime openDate, double openValue) 
+        : this (openDate, openValue)
     {
         IsLong = isLong;
+    }
+
+    public Deal(string direction, DateTime openDate, double openValue)
+        : this(openDate, openValue)
+    {
+        SetDirection(direction);
+    }
+
+    private Deal(DateTime openDate, double openValue)
+    {
         OpenDate = openDate;
         OpenValue = openValue;
-        _stops = new Dictionary <DateTime, double>();
+        _stops = new Dictionary<DateTime, double>();
     }
 
     public void SetStopReverse(DateTime date, double stopValue)
@@ -72,6 +83,18 @@ public class Deal
         return new Deal(!IsLong, date, closeValue);
     }
 
+    private void SetDirection(string dir)
+    {
+        string title = StringFunctions.GetClearlyDefinedString(dir.Trim());
+        if (title == LongTitle)
+        {
+            IsLong = true;
+        }
+        if (title == ShortTitle)
+        {
+            IsLong = false;
+        }
+    }
 
 }
 
