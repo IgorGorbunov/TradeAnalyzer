@@ -16,6 +16,7 @@ public class TradeInstrument
 
     private readonly string _quotesFileName;
     private Dictionary <DateTime, Quote> _quotes;
+    private Dictionary<DateTime, Deal> _deals;
 
     private const string DateCol = "C";
     private const string OpenCol = "E";
@@ -23,6 +24,10 @@ public class TradeInstrument
     private const string HighCol = "F";
     private const string LowCol = "G";
     private const string VolumeCol = "I";
+
+    private const string DirectionDealCol = "K";
+    private const string OpenDealCol = "L";
+    private const string ReverseDealCol = "M";
 
     private const int FirstRow = 2;
 
@@ -75,5 +80,71 @@ public class TradeInstrument
             }
         }
     }
+
+    public void ReadAllDeals()
+    {
+        DateTime fDateTime = new DateTime(1, 1, 1);
+        DateTime tDateTime = DateTime.Today;
+        ReadDeals(fDateTime, tDateTime);
+    }
+
+    public void ReadDeals(DateTime fromDate, DateTime toDate)
+    {
+        using (ExcelClass xls = new ExcelClass())
+        {
+            try
+            {
+                _deals = new Dictionary<DateTime, Deal>();
+                xls.OpenDocument(_quotesFileName, false);
+                string sDate = xls.GetCellStringValue(DateCol, FirstRow);
+                int i = FirstRow;
+                Deal deal = null;
+                bool isFirstDeal = true;
+                while (!string.IsNullOrEmpty(sDate))
+                {
+                    DateTime date = StringFunctions.GetDate(sDate, DateFormat);
+                    if (date > fromDate && date < toDate)
+                    {
+                        string sDir = xls.GetCellStringValue(DirectionDealCol, i);
+                        string sOpen = xls.GetCellStringValue(OpenDealCol, i);
+                        string sReverse = xls.GetCellStringValue(ReverseDealCol, i);
+                        if (!string.IsNullOrEmpty(sDir) &&
+                            !string.IsNullOrEmpty(sOpen) &&
+                            !string.IsNullOrEmpty(sReverse))
+                        {
+                            double reverse = double.Parse(sReverse);
+                            if (isFirstDeal)
+                            {
+                                double open = double.Parse(sOpen);
+                                deal = new Deal(sDir, date, open);
+                                deal.SetStopReverse(date, reverse);
+                                isFirstDeal = false;
+                            }
+                            else
+                            {
+                                if (deal.IsSameDirection(sDir))
+                                {
+                                    deal.SetStopReverse(date, reverse);
+                                }
+                                else
+                                {
+                                    double open = double.Parse(sOpen);
+                                    _deals.Add(deal.OpenDate, deal);
+                                    deal = deal.Reverse(date, open);
+                                }
+                            }
+                        }
+                    }
+                    i++;
+                    sDate = xls.GetCellStringValue(DateCol, i);
+                }
+            }
+            finally
+            {
+                xls.CloseDocument(false);
+            }
+        }
+    }
+
 }
 
