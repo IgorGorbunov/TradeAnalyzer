@@ -10,27 +10,29 @@ public class Deal
         Long = 1
     }
 
-    public static string GetEnumStr(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Long:
-                return "ЛОНГ";
-            case Direction.Short:
-                return "шорт";
-        }
-        return "";
-    }
-
     public bool IsLong
     {
         get;
         private set;
     }
-    public Direction DirectionDeal
+    public Direction DirectionEnum
     {
         get;
         private set;
+    }
+    public string DirectionStr
+    {
+        get
+        {
+            switch (DirectionEnum)
+            {
+                case Direction.Long:
+                    return "ЛОНГ";
+                case Direction.Short:
+                    return "шорт";
+            }
+            return "";
+        }
     }
     public DateTime OpenDate
     {
@@ -64,11 +66,11 @@ public class Deal
         IsLong = isLong;
         if (isLong)
         {
-            DirectionDeal = Direction.Long;
+            DirectionEnum = Direction.Long;
         }
         else
         {
-            DirectionDeal = Direction.Short;
+            DirectionEnum = Direction.Short;
         }
     }
 
@@ -120,12 +122,12 @@ public class Deal
         if (title == LongTitle)
         {
             IsLong = true;
-            DirectionDeal = Direction.Long;
+            DirectionEnum = Direction.Long;
         }
         if (title == ShortTitle)
         {
             IsLong = false;
-            DirectionDeal = Direction.Short;
+            DirectionEnum = Direction.Short;
         }
     }
 
