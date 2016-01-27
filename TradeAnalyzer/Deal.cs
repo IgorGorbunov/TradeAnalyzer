@@ -19,42 +19,42 @@ public class Deal
         get;
         private set;
     }
-    public double OpenValue
+    public double? OpenValue
     {
         get;
         private set;
     }
-    public double CloseValue
+    public double? CloseValue
     {
         get;
         private set;
     }
 
-    private readonly Dictionary <DateTime, double> _stops;
+    private readonly Dictionary <DateTime, double?> _stops;
 
     private const string LongTitle = "ЛOHГ";
     private const string ShortTitle = "ШOPT";
 
-    public Deal(bool isLong, DateTime openDate, double openValue) 
+    public Deal(bool isLong, DateTime openDate, double? openValue) 
         : this (openDate, openValue)
     {
         IsLong = isLong;
     }
 
-    public Deal(string direction, DateTime openDate, double openValue)
+    public Deal(string direction, DateTime openDate, double? openValue)
         : this(openDate, openValue)
     {
         SetDirection(direction);
     }
 
-    private Deal(DateTime openDate, double openValue)
+    private Deal(DateTime openDate, double? openValue)
     {
         OpenDate = openDate;
         OpenValue = openValue;
-        _stops = new Dictionary<DateTime, double>();
+        _stops = new Dictionary<DateTime, double?>();
     }
 
-    public void SetStopReverse(DateTime date, double stopValue)
+    public void SetStopReverse(DateTime date, double? stopValue)
     {
         if (!_stops.ContainsKey(date))
         {
@@ -76,7 +76,7 @@ public class Deal
         return false;
     }
 
-    public Deal Reverse(DateTime closeDate, double closeValue)
+    public Deal Reverse(DateTime closeDate, double? closeValue)
     {
         CloseDate = closeDate;
         CloseValue = closeValue;

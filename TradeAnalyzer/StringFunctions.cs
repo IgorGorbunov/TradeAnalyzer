@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 
 
@@ -77,6 +78,17 @@ public static class StringFunctions
             result += s[i];
         }
         return result;
+    }
+
+    public static double? TryParse(string s)
+    {
+        double d;
+        bool tryParse = double.TryParse(s.Replace(",", "."), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out d);
+        if (tryParse)
+        {
+            return d;
+        }
+        return null;
     }
 
     private static string GetClearDefinedStringChar(char c)

@@ -113,10 +113,10 @@ public class TradeInstrument
                             !string.IsNullOrEmpty(sOpen) &&
                             !string.IsNullOrEmpty(sReverse))
                         {
-                            double reverse = double.Parse(sReverse.Replace(",", "."), CultureInfo.InvariantCulture);
+                            double? reverse = StringFunctions.TryParse(sReverse);
                             if (isFirstDeal)
                             {
-                                double open = double.Parse(sOpen.Replace(",", "."), CultureInfo.InvariantCulture);
+                                double? open = StringFunctions.TryParse(sOpen);
                                 deal = new Deal(sDir, date, open);
                                 deal.SetStopReverse(date, reverse);
                                 isFirstDeal = false;
@@ -129,7 +129,7 @@ public class TradeInstrument
                                 }
                                 else
                                 {
-                                    double open = double.Parse(sOpen.Replace(",", "."), CultureInfo.InvariantCulture);
+                                    double? open = StringFunctions.TryParse(sOpen);
                                     _deals.Add(deal.OpenDate, deal);
                                     deal = deal.Reverse(date.AddDays(-1), open);
                                 }
