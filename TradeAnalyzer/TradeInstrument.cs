@@ -122,7 +122,7 @@ public class TradeInstrument
                             if (isFirstDeal)
                             {
                                 double? open = StringFunctions.TryParse(sOpen);
-                                deal = new Deal(sDir, date, open);
+                                deal = new Deal(sDir, date.AddDays(-1), open);
                                 deal.SetStopReverse(date, reverse);
                                 isFirstDeal = false;
                             }
@@ -137,6 +137,7 @@ public class TradeInstrument
                                     double? open = StringFunctions.TryParse(sOpen);
                                     _deals.Add(deal.OpenDate, deal);
                                     deal = deal.Reverse(date.AddDays(-1), open);
+                                    deal.SetStopReverse(date, reverse);
                                 }
                             }
                         }
@@ -162,11 +163,11 @@ public class TradeInstrument
                 int i = FirstRow;
                 foreach (KeyValuePair <DateTime, Deal> pair in _deals)
                 {
-                    string sDate = xls.GetCellStringValue(DateCol, FirstRow);
+                    string sDate = xls.GetCellStringValue(DateCol, i);
                     while (!string.IsNullOrEmpty(sDate))
                     {
                         DateTime date = StringFunctions.GetDate(sDate, DateFormat);
-                        if (date == pair.Key)
+                        if (date.AddDays(-1) == pair.Key)
                         {
                             SetDealStops(xls, ref i, pair.Value);
                             break;
@@ -200,13 +201,20 @@ public class TradeInstrument
             xls.SetCellValue(NewReverseDealCol, iRow, stop.Value.ToString());
             iRow++;
         }
-        double? profitProcentNul = deal.CloseValue*100/deal.OpenValue - 100;
+        double? profitProcentNul;
+        int directCoef = 1;
+        if (!deal.IsLong)
+        {
+            directCoef = -1;
+        }
+        profitProcentNul = (deal.CloseValue - deal.OpenValue)*directCoef*100/deal.OpenValue;
         char c = '+';
         if (profitProcentNul < 0)
         {
             c = '-';
         }
-        xls.SetCellValue(NewProfitLostCol, iRow, Math.Abs((double) profitProcentNul).ToString() + c);
+        double profitProcent = Math.Round(Math.Abs((double) profitProcentNul), 2);
+        xls.SetCellValue(NewProfitLostCol, iRow, profitProcent.ToString() + c);
     }
 
 }

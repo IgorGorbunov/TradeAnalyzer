@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using Microsoft.Win32;
 
 namespace TradeAnalyzer
@@ -20,7 +21,9 @@ namespace TradeAnalyzer
                 TradeInstrument instrument = new TradeInstrument("CHMF", "Северсталь", Files[0]);
                 instrument.ReadAllQuotes();
                 instrument.ReadAllDeals();
+                instrument.WriteAllDeals();
             }
+            MessageBox.Show("vse!");
         }
 
         private static bool SetFiles()
