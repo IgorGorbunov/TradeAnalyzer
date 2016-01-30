@@ -52,6 +52,13 @@ public class TradeInstrument
         _quotesFileName = quotesFileName;
     }
 
+    public TradeInstrument(string quotesFileName)
+    {
+        string[] split = quotesFileName.Split('_');
+        Code = split[0].Trim();
+        _quotesFileName = quotesFileName;
+    }
+
     public void ReadAllQuotes()
     {
         DateTime fDateTime = new DateTime(1, 1, 1);

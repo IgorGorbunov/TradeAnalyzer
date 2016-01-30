@@ -18,11 +18,14 @@ namespace TradeAnalyzer
             bool selectFiles = SetFiles();
             if (selectFiles)
             {
-                TradeInstrument instrument = new TradeInstrument("CHMF", "Северсталь", Files[0]);
-                instrument.ReadAllQuotes();
-                instrument.ReadAllDeals();
-                //instrument.WriteAllDeals();
-                instrument.WriteSimpleDeals();
+                foreach (string file in Files)
+                {
+                    TradeInstrument instrument = new TradeInstrument(file);
+                    instrument.ReadAllQuotes();
+                    instrument.ReadAllDeals();
+                    instrument.WriteAllDeals();
+                    instrument.WriteSimpleDeals();
+                }
             }
             MessageBox.Show("vse!");
         }
