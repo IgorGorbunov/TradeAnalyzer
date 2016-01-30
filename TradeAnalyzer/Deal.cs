@@ -72,7 +72,7 @@ public class Deal
         get
         {
             int directCoef = 1;
-            if (IsLong)
+            if (!IsLong)
             {
                 directCoef = -1;
             }
