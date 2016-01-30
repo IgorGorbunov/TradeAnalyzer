@@ -21,7 +21,8 @@ namespace TradeAnalyzer
                 TradeInstrument instrument = new TradeInstrument("CHMF", "Северсталь", Files[0]);
                 instrument.ReadAllQuotes();
                 instrument.ReadAllDeals();
-                instrument.WriteAllDeals();
+                //instrument.WriteAllDeals();
+                instrument.WriteSimpleDeals();
             }
             MessageBox.Show("vse!");
         }

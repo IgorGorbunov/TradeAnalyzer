@@ -18,6 +18,7 @@ public class TradeInstrument
     private readonly string _quotesFileName;
     private Dictionary <DateTime, Quote> _quotes;
     private Dictionary<DateTime, Deal> _deals;
+    private Dictionary<DateTime, Deal> _simpleDeals;
 
     private const string DateCol = "C";
     private const string OpenCol = "E";
@@ -34,6 +35,11 @@ public class TradeInstrument
     private const string NewOpenDealCol = "P";
     private const string NewReverseDealCol = "Q";
     private const string NewProfitLostCol = "R";
+
+    private const string SimpleDirectionDealCol = "T";
+    private const string SimpleOpenDealCol = "U";
+    private const string SimpleReverseDealCol = "V";
+    private const string SimpleProfitLostCol = "W";
 
     private const int FirstRow = 2;
 
@@ -169,7 +175,9 @@ public class TradeInstrument
                         DateTime date = StringFunctions.GetDate(sDate, DateFormat);
                         if (date.AddDays(-1) == pair.Key)
                         {
-                            SetDealStops(xls, ref i, pair.Value);
+                            SetDealStops
+                                    (xls, ref i, pair.Value, NewDirectionDealCol, NewOpenDealCol,
+                                     NewReverseDealCol, NewProfitLostCol);
                             break;
                         }
                         i++;
@@ -184,9 +192,67 @@ public class TradeInstrument
         }
     }
 
-    private void SetDealStops(ExcelClass xls, ref int iRow, Deal deal)
+    public void WriteSimpleDeals()
     {
-        foreach (KeyValuePair <DateTime, double?> stop in deal.Stops)
+        using (ExcelClass xls = new ExcelClass())
+        {
+            try
+            {
+                _simpleDeals = new Dictionary<DateTime, Deal>();
+                xls.OpenDocument(_quotesFileName, false);
+                string sDate = xls.GetCellStringValue(DateCol, FirstRow);
+                int i = FirstRow;
+                int iOpen = i;
+                Deal deal = null;
+                bool isFirstDeal = true;
+                double? currentReverse = 0.0;
+                while (!string.IsNullOrEmpty(sDate))
+                {
+                    DateTime date = StringFunctions.GetDate(sDate, DateFormat);
+                    if (isFirstDeal)
+                    {
+                        string sDir = xls.GetCellStringValue(NewDirectionDealCol, i);
+                        double? openVal = StringFunctions.TryParse
+                                (xls.GetCellStringValue(NewOpenDealCol, i));
+                        double? stop = StringFunctions.TryParse
+                                (xls.GetCellStringValue(NewReverseDealCol, i));
+
+                        deal = new Deal(sDir, date, openVal);
+                        iOpen = i;
+                        deal.SetStopReverse(date, stop);
+
+                        currentReverse = stop;
+                        isFirstDeal = false;
+                    }
+
+                    double? closeValue = StringFunctions.TryParse
+                                (xls.GetCellStringValue(CloseCol, i));
+                    if (deal.IsLong && closeValue < currentReverse ||
+                        !deal.IsLong && closeValue > currentReverse)
+                    {
+                        Deal newDeal = deal.Reverse(date, closeValue);
+                        SetDealStops
+                                (xls, ref iOpen, deal, SimpleDirectionDealCol, SimpleOpenDealCol,
+                                 SimpleReverseDealCol, SimpleProfitLostCol);
+                        deal = newDeal;
+                        iOpen = i + 1;
+                    }
+                    
+
+                    i++;
+                    sDate = xls.GetCellStringValue(DateCol, i);
+                }
+            }
+            finally
+            {
+                xls.CloseDocumentSave();
+            }
+        }
+    }
+
+    private void SetDealStops(ExcelClass xls, ref int iRow, Deal deal, string directionCol, string openCol, string reverseCol, string profitLossCol)
+    {
+        foreach (KeyValuePair<DateTime, double?> stop in deal.Stops)
         {
             string sDate = xls.GetCellStringValue(DateCol, iRow);
             DateTime date = StringFunctions.GetDate(sDate, DateFormat);
@@ -196,25 +262,12 @@ public class TradeInstrument
                 sDate = xls.GetCellStringValue(DateCol, iRow);
                 date = StringFunctions.GetDate(sDate, DateFormat);
             }
-            xls.SetCellValue(NewDirectionDealCol, iRow, deal.DirectionStr);
-            xls.SetCellValue(NewOpenDealCol, iRow, deal.OpenValue.ToString());
-            xls.SetCellValue(NewReverseDealCol, iRow, stop.Value.ToString());
+            xls.SetCellValue(directionCol, iRow, deal.DirectionStr);
+            xls.SetCellValue(openCol, iRow, deal.OpenValue.ToString());
+            xls.SetCellValue(reverseCol, iRow, stop.Value.ToString());
             iRow++;
         }
-        double? profitProcentNul;
-        int directCoef = 1;
-        if (!deal.IsLong)
-        {
-            directCoef = -1;
-        }
-        profitProcentNul = (deal.CloseValue - deal.OpenValue)*directCoef*100/deal.OpenValue;
-        char c = '+';
-        if (profitProcentNul < 0)
-        {
-            c = '-';
-        }
-        double profitProcent = Math.Round(Math.Abs((double) profitProcentNul), 2);
-        xls.SetCellValue(NewProfitLostCol, iRow, profitProcent.ToString() + c);
+        xls.SetCellValue(profitLossCol, iRow, deal.ProfitProcentStr);
     }
 
 }
