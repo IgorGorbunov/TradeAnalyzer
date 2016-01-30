@@ -79,7 +79,7 @@ public class TradeInstrument
                         double high = double.Parse(xls.GetCellStringValue(HighCol, i));
                         double low = double.Parse(xls.GetCellStringValue(LowCol, i));
                         int volume = int.Parse(xls.GetCellStringValue(VolumeCol, i));
-                        Quote quote = new Quote(date, open, close, high, low, volume);
+                        Quote quote = new Quote(date, open, close, high, low, volume, i);
                         _quotes.Add(date, quote);
                     }
                     i++;
@@ -204,44 +204,70 @@ public class TradeInstrument
                 int i = FirstRow;
                 int iOpen = i;
                 Deal deal = null;
+                Deal romanDeal = null;
+                bool isCurrentDeal = false;
                 bool isFirstDeal = true;
                 double? currentReverse = 0.0;
-                while (!string.IsNullOrEmpty(sDate))
+                double? stop;
+                double? lastStop = 0;
+                DateTime prevDay = new DateTime(1, 1, 1);
+
+                foreach (KeyValuePair <DateTime, Quote> quote in _quotes)
                 {
-                    DateTime date = StringFunctions.GetDate(sDate, DateFormat);
-                    if (isFirstDeal)
+                    DateTime date = quote.Key;
+                    if (!isCurrentDeal)
                     {
-                        string sDir = xls.GetCellStringValue(NewDirectionDealCol, i);
-                        double? openVal = StringFunctions.TryParse
-                                (xls.GetCellStringValue(NewOpenDealCol, i));
-                        double? stop = StringFunctions.TryParse
-                                (xls.GetCellStringValue(NewReverseDealCol, i));
+                        if (!_deals.ContainsKey(prevDay))
+                        {
+                            prevDay = date;
+                            continue;
+                        }
+                            
 
-                        deal = new Deal(sDir, date, openVal);
-                        iOpen = i;
-                        deal.SetStopReverse(date, stop);
-
-                        currentReverse = stop;
-                        isFirstDeal = false;
+                        romanDeal = _deals[prevDay];
+                        isCurrentDeal = true;
+                        deal = new Deal(romanDeal.IsLong, romanDeal.OpenDate, romanDeal.OpenValue);
                     }
 
-                    double? closeValue = StringFunctions.TryParse
-                                (xls.GetCellStringValue(CloseCol, i));
-                    if (deal.IsLong && closeValue < currentReverse ||
-                        !deal.IsLong && closeValue > currentReverse)
+                    if (!isFirstDeal)
                     {
-                        Deal newDeal = deal.Reverse(date, closeValue);
-                        SetDealStops
-                                (xls, ref iOpen, deal, SimpleDirectionDealCol, SimpleOpenDealCol,
-                                 SimpleReverseDealCol, SimpleProfitLostCol);
-                        deal = newDeal;
-                        iOpen = i + 1;
+                        stop = romanDeal.GetStop(date);
+                        if (stop == null)
+                        {
+                            deal.Close(prevDay, lastStop);
+                            Quote quoteRow = _quotes[romanDeal.OpenDate];
+                            int row = quoteRow.Row;
+                            SetDealStops
+                                    (xls, ref row, deal, SimpleDirectionDealCol, SimpleOpenDealCol,
+                                     SimpleReverseDealCol, SimpleProfitLostCol);
+                            _simpleDeals.Add(date, deal);
+                            isCurrentDeal = false;
+                        }
+                        else
+                        {
+                            deal.SetStopReverse(date, stop);
+                            if (deal.IsLong && quote.Value.Close < stop ||
+                               !deal.IsLong && quote.Value.Close > stop)
+                            {
+                                Deal newDeal = deal.Reverse(date, quote.Value.Close);
+                                Quote quoteRow = _quotes[romanDeal.OpenDate];
+                                int row = quoteRow.Row;
+                                SetDealStops
+                                        (xls, ref row, deal, SimpleDirectionDealCol, SimpleOpenDealCol,
+                                         SimpleReverseDealCol, SimpleProfitLostCol);
+                                _simpleDeals.Add(date, deal);
+                                deal = newDeal;
+                                isCurrentDeal = false;
+                            }
+                        }
+                        lastStop = stop;
                     }
-                    
 
-                    i++;
-                    sDate = xls.GetCellStringValue(DateCol, i);
+                    prevDay = date;
+                    isFirstDeal = false;
                 }
+
+
             }
             finally
             {
