@@ -85,7 +85,7 @@ public class TradeInstrument
                         double close = double.Parse(xls.GetCellStringValue(CloseCol, i));
                         double high = double.Parse(xls.GetCellStringValue(HighCol, i));
                         double low = double.Parse(xls.GetCellStringValue(LowCol, i));
-                        int volume = int.Parse(xls.GetCellStringValue(VolumeCol, i));
+                        ulong volume = ulong.Parse(xls.GetCellStringValue(VolumeCol, i));
                         Quote quote = new Quote(date, open, close, high, low, volume, i);
                         _quotes.Add(date, quote);
                     }

@@ -32,7 +32,7 @@ public class Quote
         get;
         private set;
     }
-    public double Volume
+    public ulong Volume
     {
         get;
         private set;
@@ -43,7 +43,7 @@ public class Quote
         private set;
     }
 
-    public Quote(DateTime dt, double open, double close, double high, double low, double volume, int iRow)
+    public Quote(DateTime dt, double open, double close, double high, double low, ulong volume, int iRow)
     {
         Date = dt;
         Open = open;
