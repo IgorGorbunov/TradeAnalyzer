@@ -146,10 +146,15 @@ public class Deal
         return false;
     }
 
-    public Deal Reverse(DateTime closeDate, double? closeValue)
+    public void Close(DateTime closeDate, double? closeValue)
     {
         CloseDate = closeDate;
         CloseValue = closeValue;
+    }
+
+    public Deal Reverse(DateTime closeDate, double? closeValue)
+    {
+        Close(closeDate, closeValue);
         return new Deal(!IsLong, closeDate, closeValue);
     }
 
