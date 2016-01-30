@@ -153,6 +153,15 @@ public class Deal
         return new Deal(!IsLong, closeDate, closeValue);
     }
 
+    public double? GetStop(DateTime date)
+    {
+        if (_stops.ContainsKey(date))
+        {
+            return _stops[date];
+        }
+        return null;
+    }
+
     private void SetDirection(string dir)
     {
         string title = StringFunctions.GetClearlyDefinedString(dir.Trim());
