@@ -37,8 +37,13 @@ public class Quote
         get;
         private set;
     }
+    public int Row
+    {
+        get;
+        private set;
+    }
 
-    public Quote(DateTime dt, double open, double close, double high, double low, double volume)
+    public Quote(DateTime dt, double open, double close, double high, double low, double volume, int iRow)
     {
         Date = dt;
         Open = open;
@@ -46,6 +51,7 @@ public class Quote
         High = high;
         Low = low;
         Volume = volume;
+        Row = iRow;
     }
 }
 
