@@ -1,17 +1,27 @@
-﻿<Window x:Class="TradeAnalyzer.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen">
+        xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" x:Class="TradeAnalyzer.MainWindow"
+        Title="MainWindow" Height="350" Width="803" WindowStartupLocation="CenterScreen" MinWidth="525" MinHeight="350">
 
     <DockPanel LastChildFill="False" Margin="0" Grid.Column="2">
         <StatusBar Height="0" VerticalAlignment="Top" DockPanel.Dock="Bottom" Margin="0"/>
         <Menu Height="22" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
             <MenuItem x:Name="MiHelp" Header="Справка" Click="miHelp_Click"/>
         </Menu>
-        <StackPanel Height="298" VerticalAlignment="Top" Width="100"/>
+        <StackPanel Height="298" VerticalAlignment="Top" Width="164">
+            <Button x:Name="BCheck" Content="Выполнить проверку" HorizontalAlignment="Center" VerticalAlignment="Center" Width="134" Click="BCheck_Click" Margin="0,10,0,0"/>
+            <Label Content="Выберите инструмент" Margin="10,10,10,0"/>
+            <ComboBox x:Name="cbInstrs" Margin="10,0"/>
+        </StackPanel>
         <StackPanel Height="298" VerticalAlignment="Top" Width="100" DockPanel.Dock="Right"/>
-        <Grid Height="298" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
-            <Button x:Name="BCheck" Content="Выполнить проверку" HorizontalAlignment="Center" VerticalAlignment="Center" Width="134" Click="BCheck_Click"/>
+        <Grid Margin="0" Width="456">
+            <chartingToolkit:Chart x:Name="chartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Center">
+                <chartingToolkit:Chart.DataContext>
+                    <PointCollection>1,10 2,20 3,30 4,40</PointCollection>
+                </chartingToolkit:Chart.DataContext>
+                <chartingToolkit:ColumnSeries DependentValuePath="X" IndependentValuePath="Y" ItemsSource="{Binding}"/>
+            </chartingToolkit:Chart>
         </Grid>
     </DockPanel>
 

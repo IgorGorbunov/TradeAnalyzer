@@ -24,3 +24,7 @@ D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xaml.dl
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xml.dll
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\System.Xml.Linq.dll
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WindowsBase.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\system.windows.controls.datavisualization.toolkit.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WPFToolkit.dll
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\system.windows.controls.datavisualization.toolkit.pdb
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WPFToolkit.pdb
