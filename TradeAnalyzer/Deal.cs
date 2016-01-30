@@ -54,6 +54,39 @@ public class Deal
         get;
         private set;
     }
+    public double? ProfitProcent
+    {
+        get
+        {
+            int directCoef = 1;
+            if (IsLong)
+            {
+                directCoef = -1;
+            }
+            double? profitProcentNul = (CloseValue - OpenValue) * directCoef * 100 / OpenValue;
+            return Math.Round((double)profitProcentNul, 2);
+        }
+    }
+    public string ProfitProcentStr
+    {
+        get
+        {
+            int directCoef = 1;
+            if (IsLong)
+            {
+                directCoef = -1;
+            }
+            double? profitProcentNul = (CloseValue - OpenValue) * directCoef * 100 / OpenValue;
+            char c = '+';
+            if (profitProcentNul < 0)
+            {
+                c = '-';
+            }
+            double profitProcent = Math.Round(Math.Abs((double)profitProcentNul), 2);
+            return profitProcent.ToString() + c;
+        }
+    }
+
     public Dictionary <DateTime, double?> Stops
     {
         get { return _stops; }
