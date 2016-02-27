@@ -2,27 +2,40 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" x:Class="TradeAnalyzer.MainWindow"
-        Title="MainWindow" Height="350" Width="803" WindowStartupLocation="CenterScreen" MinWidth="525" MinHeight="350">
+        Title="MainWindow" Height="392" Width="895" WindowStartupLocation="CenterScreen" MinWidth="525" MinHeight="350">
 
-    <DockPanel LastChildFill="False" Margin="0" Grid.Column="2">
+    <DockPanel Margin="0" Grid.Column="2">
         <StatusBar Height="0" VerticalAlignment="Top" DockPanel.Dock="Bottom" Margin="0"/>
         <Menu Height="22" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
             <MenuItem x:Name="MiHelp" Header="Справка" Click="miHelp_Click"/>
         </Menu>
-        <StackPanel Height="298" VerticalAlignment="Top" Width="164">
-            <Button x:Name="BCheck" Content="Выполнить проверку" HorizontalAlignment="Center" VerticalAlignment="Center" Width="134" Click="BCheck_Click" Margin="0,10,0,0"/>
+        <StackPanel Width="164">
+            <Button x:Name="BCheck" Content="Выполнить проверку" VerticalAlignment="Center" Width="134" Click="BCheck_Click" Margin="0,10,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
             <Label Content="Выберите инструмент" Margin="10,10,10,0"/>
             <ComboBox x:Name="cbInstrs" Margin="10,0"/>
+            <Label Content="Срок просмотра" Margin="10,10,0,0"/>
+            <ComboBox Margin="10,0,10,10"/>
         </StackPanel>
-        <StackPanel Height="298" VerticalAlignment="Top" Width="100" DockPanel.Dock="Right"/>
-        <Grid Margin="0" Width="456">
-            <chartingToolkit:Chart x:Name="chartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Center">
-                <chartingToolkit:Chart.DataContext>
-                    <PointCollection>1,10 2,20 3,30 4,40</PointCollection>
-                </chartingToolkit:Chart.DataContext>
-                <chartingToolkit:ColumnSeries DependentValuePath="X" IndependentValuePath="Y" ItemsSource="{Binding}"/>
-            </chartingToolkit:Chart>
-        </Grid>
+        <Grid Width="240" DockPanel.Dock="Right" Margin="0,0,0,0" HorizontalAlignment="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <Label Content="Сделки Романа Андреева" Margin="0" VerticalAlignment="Top" DockPanel.Dock="Top" HorizontalContentAlignment="Stretch"/>
+                <DataGrid HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+            </DockPanel>
+            <DockPanel Grid.Row="1">
+                <Label Content="Сделки со стопом на конец дня" VerticalAlignment="Top" DockPanel.Dock="Top"/>
+                <DataGrid VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+            </DockPanel>
+    </Grid>
+        <chartingToolkit:Chart x:Name="chartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <chartingToolkit:Chart.DataContext>
+                <PointCollection>1,10 2,20 3,30 4,40</PointCollection>
+            </chartingToolkit:Chart.DataContext>
+            <chartingToolkit:ColumnSeries DependentValuePath="X" IndependentValuePath="Y" ItemsSource="{Binding}"/>
+        </chartingToolkit:Chart>
     </DockPanel>
 
 </Window>

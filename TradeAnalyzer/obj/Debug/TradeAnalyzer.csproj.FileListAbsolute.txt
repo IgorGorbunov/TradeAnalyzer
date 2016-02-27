@@ -28,3 +28,5 @@ D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\system.windows
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WPFToolkit.dll
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\system.windows.controls.datavisualization.toolkit.pdb
 D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\WPFToolkit.pdb
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\Microsoft.Office.Interop.Excel.xml
+D:\Work\Coding\Github\repos\TradeAnalyzer\TradeAnalyzer\bin\Debug\Office.xml
