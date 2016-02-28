@@ -1,19 +1,209 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 
+/// <summary>
+/// Класс для работы с данными об эмитенте
+/// </summary>
 public class TradeInstrument
 {
+    /// <summary>
+    /// Эмитент
+    /// </summary>
+    public enum Issuer
+    {
+        /// <summary>
+        /// Отсутствующий эмитент
+        /// </summary>
+        None,
+        /// <summary>
+        /// ФСК
+        /// </summary>
+        Fsk,
+        /// <summary>
+        /// Газпром
+        /// </summary>
+        Gazprom,
+        /// <summary>
+        /// ГМКНорНикель
+        /// </summary>
+        GmkNorNikel,
+        /// <summary>
+        /// Лукойл
+        /// </summary>
+        Lukoil,
+        /// <summary>
+        /// МТС
+        /// </summary>
+        Mts,
+        /// <summary>
+        /// Роснефть
+        /// </summary>
+        Rosneft,
+        /// <summary>
+        /// Ростелеком
+        /// </summary>
+        Rostelekom,
+        /// <summary>
+        /// Сбербанк ао
+        /// </summary>
+        SberbankAo,
+        /// <summary>
+        /// Сбербанк ап
+        /// </summary>
+        SberbankAp,
+        /// <summary>
+        /// Северсталь
+        /// </summary>
+        Severstal,
+        /// <summary>
+        /// СургутНефтеГаз ао
+        /// </summary>
+        SurgutNfgAo,
+        /// <summary>
+        /// СургутНефетГаз ап
+        /// </summary>
+        SurgutNfgAp,
+        /// <summary>
+        /// ВТБ
+        /// </summary>
+        Vtb
+    }
+
+    /// <summary>
+    /// Метод возвращает код эмитента
+    /// </summary>
+    /// <param name="issuer">Эмитент</param>
+    /// <returns></returns>
+    public static string GetIssuerCode(Issuer issuer)
+    {
+        switch (issuer)
+        {
+            case Issuer.Fsk:
+                return "FEES";
+            case Issuer.Gazprom:
+                return "GAZP";
+            case Issuer.GmkNorNikel:
+                return "GMKN";
+            case Issuer.Lukoil:
+                return "LKOH";
+            case Issuer.Mts:
+                return "MTSS";
+            case Issuer.Rosneft:
+                return "ROSN";
+            case Issuer.Rostelekom:
+                return "RTKM";
+            case Issuer.SberbankAo:
+                return "SBER";
+            case Issuer.SberbankAp:
+                return "SBERP";
+            case Issuer.Severstal:
+                return "CHMF";
+            case Issuer.SurgutNfgAo:
+                return "SNGS";
+            case Issuer.SurgutNfgAp:
+                return "SNGSP";
+            case Issuer.Vtb:
+                return "VTBR";
+        }
+        return null;
+    }
+    /// <summary>
+    /// Метод возвращает название эмитента
+    /// </summary>
+    /// <param name="issuer">Эмитент</param>
+    /// <returns></returns>
+    public static string GetIssuerName(Issuer issuer)
+    {
+        switch (issuer)
+        {
+            case Issuer.Fsk:
+                return "ФСК";
+            case Issuer.Gazprom:
+                return "Газпром";
+            case Issuer.GmkNorNikel:
+                return "ГМКНорНикель";
+            case Issuer.Lukoil:
+                return "Лукойл";
+            case Issuer.Mts:
+                return "МТС";
+            case Issuer.Rosneft:
+                return "Роснефть";
+            case Issuer.Rostelekom:
+                return "Ростелеком";
+            case Issuer.SberbankAo:
+                return "Сбербанк ао";
+            case Issuer.SberbankAp:
+                return "Сбербанк ап";
+            case Issuer.Severstal:
+                return "Северсталь";
+            case Issuer.SurgutNfgAo:
+                return "СургутНефтеГаз ао";
+            case Issuer.SurgutNfgAp:
+                return "СургутНефтеГаз ап";
+            case Issuer.Vtb:
+                return "ВТБ";
+        }
+        return null;
+    }
+    /// <summary>
+    /// Метод эмитент по его коду
+    /// </summary>
+    /// <param name="issuerCode">Код эмитента</param>
+    /// <returns></returns>
+    public static Issuer GetIssuer(string issuerCode)
+    {
+        switch (issuerCode)
+        {
+            case "FEES":
+                return Issuer.Fsk;
+            case "GAZP":
+                return Issuer.Gazprom;
+            case "GMKN":
+                return Issuer.GmkNorNikel;
+            case "LKOH":
+                return Issuer.Lukoil;
+            case "MTSS":
+                return Issuer.Mts;
+            case "ROSN":
+                return Issuer.Rosneft;
+            case "RTKM":
+                return Issuer.Rostelekom;
+            case "SBER":
+                return Issuer.SberbankAo;
+            case "SBERP":
+                return Issuer.SberbankAp;
+            case "CHMF":
+                return Issuer.Severstal;
+            case "SNGS":
+                return Issuer.SurgutNfgAo;
+            case "SNGSP":
+                return Issuer.SurgutNfgAp;
+            case "VTBR":
+                return Issuer.Vtb;
+        }
+        return Issuer.None;
+    }
+    
+    /// <summary>
+    /// Код эмитента
+    /// </summary>
     public string Code
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Наименование эмитента
+    /// </summary>
     public string Name
     {
         get;
         private set;
     }
+
+    private readonly Issuer _issuer;
 
     private readonly string _quotesFileName;
     private Dictionary <DateTime, Quote> _quotes;
@@ -45,17 +235,13 @@ public class TradeInstrument
 
     private const string DateFormat = "ddMMyy";
 
-    public TradeInstrument(string code, string name, string quotesFileName)
-    {
-        Code = code;
-        Name = name;
-        _quotesFileName = quotesFileName;
-    }
-
     public TradeInstrument(string quotesFileName)
     {
-        string[] split = quotesFileName.Split('_');
+        string shortFileName = Path.GetFileNameWithoutExtension(quotesFileName);
+        string[] split = shortFileName.Split('_');
         Code = split[0].Trim();
+        _issuer = GetIssuer(Code);
+        Name = GetIssuerName(_issuer);
         _quotesFileName = quotesFileName;
     }
 

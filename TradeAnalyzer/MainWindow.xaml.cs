@@ -37,5 +37,14 @@ namespace TradeAnalyzer
             StatisticsFiles.Check();
         }
 
+        private void Window_Loaded_1(object sender, RoutedEventArgs e)
+        {
+            List <string> issuerNames = StatisticsFiles.SetIssuerFiles();
+            foreach (string issuerName in issuerNames)
+            {
+                cbInstrs.Items.Add(issuerName);
+            }
+        }
+
     }
 }

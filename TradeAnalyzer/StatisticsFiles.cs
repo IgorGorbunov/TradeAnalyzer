@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using Microsoft.Win32;
 
@@ -6,7 +8,9 @@ namespace TradeAnalyzer
 {
     public static class StatisticsFiles
     {
-        private static readonly List <string> Files; 
+        private static readonly List <string> Files;
+
+        private static List <TradeInstrument> issuers; 
 
         static StatisticsFiles()
         {
@@ -28,6 +32,25 @@ namespace TradeAnalyzer
                 }
             }
             MessageBox.Show("vse!");
+        }
+
+        public static List <string> SetIssuerFiles()
+        {
+            string exePath = Assembly.GetExecutingAssembly().Location;
+            string folder = Path.GetDirectoryName(exePath);
+            string[] files = Directory.GetFiles(folder, "*.xls");
+            issuers = new List <TradeInstrument>();
+            foreach (string file in files)
+            {
+                issuers.Add(new TradeInstrument(file));
+            }
+            List <string> issuerNames = new List <string>();
+            foreach (TradeInstrument issuer in issuers)
+            {
+                issuerNames.Add(issuer.Name);
+            }
+            issuerNames.Sort();
+            return issuerNames;
         }
 
         private static bool SetFiles()

@@ -2,7 +2,9 @@
 using System.Globalization;
 using System.Linq;
 
-
+/// <summary>
+/// Класс дополнительных функций для строковых переменных
+/// </summary>
 public static class StringFunctions
 {
     private const char DateDay = 'd';
@@ -13,7 +15,6 @@ public static class StringFunctions
     {
         return s.Aggregate("", (current, c) => current + GetClearDefinedStringChar(c));
     }
-
 
     public static DateTime GetDate(string s, string format)
     {
