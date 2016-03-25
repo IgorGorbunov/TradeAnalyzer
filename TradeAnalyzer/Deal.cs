@@ -83,7 +83,7 @@ public class Deal
     /// <summary>
     /// Прибыль в процентах
     /// </summary>
-    public double? ProfitProcent
+    public double ProfitProcent
     {
         get
         {
@@ -94,6 +94,22 @@ public class Deal
             }
             double? profitProcentNul = (CloseValue - OpenValue) * directCoef * 100 / OpenValue;
             return Math.Round((double)profitProcentNul, 2);
+        }
+    }
+    /// <summary>
+    /// Прибыль в процентах c комиссией
+    /// </summary>
+    public double ProfitProcentWithCosts
+    {
+        get
+        {
+            int directCoef = -1;
+            if (IsLong)
+            {
+                directCoef = 1;
+            }
+            double profitProcentNul = ((((double)CloseValue - (double)OpenValue) * directCoef) - Costs) * 100 / (double)OpenValue;
+            return Math.Round(profitProcentNul, 2);
         }
     }
     /// <summary>
@@ -119,6 +135,38 @@ public class Deal
     public Dictionary <DateTime, double?> Stops
     {
         get { return _stops; }
+    }
+    /// <summary>
+    /// Брокерская комиссия (за сделку + комиссия за шорт)
+    /// </summary>
+    public double Costs
+    {
+        get
+        {
+            double openCost = Math.Round((double) OpenValue * BrokerCosts.DealProcentCost / 100, 2);
+            //if (openCost < BrokerCosts.MinDealCost)
+            //{
+            //    openCost = BrokerCosts.MinDealCost;
+            //}
+            double closeCost = Math.Round((double) CloseValue * BrokerCosts.DealProcentCost / 100, 2);
+            //if (closeCost < BrokerCosts.MinDealCost)
+            //{
+            //    closeCost = BrokerCosts.MinDealCost;
+            //}
+            double shortCost = 0;
+            if (!IsLong)
+            {
+                int nDays = 365;
+                if (DateTime.IsLeapYear(DateTime.Now.Year))
+                {
+                    nDays = 366;
+                }
+                double procentCostInDay = BrokerCosts.ShortYearProcentCost/nDays;
+                double costInDay = Math.Round((double) OpenValue * procentCostInDay / 100, 2);
+                shortCost = costInDay * (_stops.Count - 1);
+            }
+            return openCost + closeCost + shortCost;
+        }
     }
 
     private readonly Dictionary <DateTime, double?> _stops;

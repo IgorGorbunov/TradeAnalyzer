@@ -88,6 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BrokerCosts.cs" />
     <Compile Include="Deal.cs" />
     <Compile Include="DealDataViewer.cs" />
     <Compile Include="ExcelClass.cs" />

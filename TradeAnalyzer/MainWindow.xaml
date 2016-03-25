@@ -89,9 +89,10 @@
                 </ControlTemplate>
             </chartingToolkit:Chart.Resources>
             <chartingToolkit:Chart.Series>
-                <chartingToolkit:LineSeries Title="Доходность Романа"
-                    IndependentValueBinding="{Binding Path=Key}"
-                    DependentValueBinding="{Binding Path=Value}"/>
+                <chartingToolkit:LineSeries Title="Доходность Романа" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}">
+                </chartingToolkit:LineSeries>
+                <chartingToolkit:LineSeries Title="Доходность Романа c комиссией" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}">
+                </chartingToolkit:LineSeries>
             </chartingToolkit:Chart.Series>
         </chartingToolkit:Chart>
         

@@ -13,7 +13,7 @@ public class DealDataViewer
     public string CloseDate { get; set; }
     public double? CloseValue { get; set; }
     public int Duration { get; set; }
-    public double? Profit { get; set; }
+    public double Profit { get; set; }
     public double ProfitComis { get; set; }
 }
 

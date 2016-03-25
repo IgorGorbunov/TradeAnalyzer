@@ -46,7 +46,7 @@ namespace TradeAnalyzer
                 TimeSpan dur = deal.CloseDate - deal.OpenDate;
                 dealParams.Duration = dur.Days;
                 dealParams.Profit = deal.ProfitProcent;
-                dealParams.ProfitComis = 0.0;
+                dealParams.ProfitComis = deal.ProfitProcentWithCosts;
                 deals.Add(dealParams);
             }
             CollectionViewSource itemCollectionViewSource = (CollectionViewSource)(FindResource("ItemCollectionViewSource"));
@@ -81,14 +81,26 @@ namespace TradeAnalyzer
 
         private void CbDurationSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Dictionary <DateTime, double?> points = new Dictionary <DateTime, double?>();
-            double? startValue = 100;
+            ((LineSeries)ChartProfitness.Series[0]).ItemsSource = null;
+            ((LineSeries)ChartProfitness.Series[1]).ItemsSource = null;
+
+            Dictionary <DateTime, double> points = new Dictionary <DateTime, double>();
+            double startValue = 100;
             foreach (KeyValuePair <DateTime, Deal> deal in _romanDeals)
             {
                 startValue = startValue * deal.Value.ProfitProcent / 100 + startValue;
                 points.Add(deal.Key, startValue);
             }
             ((LineSeries) ChartProfitness.Series[0]).ItemsSource = points;
+
+            points.Clear();
+            startValue = 100;
+            foreach (KeyValuePair<DateTime, Deal> deal in _romanDeals)
+            {
+                startValue = startValue * deal.Value.ProfitProcentWithCosts / 100 + startValue;
+                points.Add(deal.Key, startValue);
+            }
+            ((LineSeries)ChartProfitness.Series[1]).ItemsSource = points;
         }
 
 
