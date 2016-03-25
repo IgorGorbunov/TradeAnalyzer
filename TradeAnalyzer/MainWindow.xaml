@@ -14,9 +14,13 @@
         <StackPanel Width="164">
             <Button x:Name="BCheck" Content="Выполнить проверку" VerticalAlignment="Center" Width="134" Click="BCheck_Click" Margin="0,10,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
             <Label Content="Выберите инструмент" Margin="10,10,10,0"/>
-            <ComboBox x:Name="cbInstrs" Margin="10,0" SelectionChanged="cbInstrs_SelectionChanged"/>
+            <ComboBox x:Name="CbInstrs" Margin="10,0" SelectionChanged="cbInstrs_SelectionChanged"/>
             <Label Content="Срок просмотра" Margin="10,10,0,0"/>
-            <ComboBox Margin="10,0,10,10"/>
+            <ComboBox x:Name="CbDurationSelection" Margin="10,0,10,10" SelectionChanged="CbDurationSelection_SelectionChanged" >
+                <ComboBoxItem Content="За всё время"/>
+                <ComboBoxItem Content="За 1 год"/>
+                <ComboBoxItem Content="За полгода"/>
+            </ComboBox>
         </StackPanel>
         <Grid Width="420" DockPanel.Dock="Right" Margin="0,0,0,0" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
@@ -54,11 +58,13 @@
                 </DataGrid>
             </DockPanel>
     </Grid>
-        <chartingToolkit:Chart x:Name="chartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
-            <chartingToolkit:Chart.DataContext>
-                <PointCollection>1,10 2,20 3,30 4,40</PointCollection>
-            </chartingToolkit:Chart.DataContext>
-            <chartingToolkit:ColumnSeries DependentValuePath="X" IndependentValuePath="Y" ItemsSource="{Binding}"/>
+        <chartingToolkit:Chart x:Name="ChartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <chartingToolkit:Chart.Series>
+                <chartingToolkit:LineSeries Title="Доходность Романа"
+                    IndependentValueBinding="{Binding Path=Key}"
+                    DependentValueBinding="{Binding Path=Value}">
+                </chartingToolkit:LineSeries>
+            </chartingToolkit:Chart.Series>
         </chartingToolkit:Chart>
     </DockPanel>
 
