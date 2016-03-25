@@ -1,25 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
+/// <summary>
+/// Класс с данными о сделках
+/// </summary>
 public class Deal
 {
+    /// <summary>
+    /// Перечисление направления сделки
+    /// </summary>
     public enum Direction
     {
         Short = 0,
         Long = 1
     }
 
+    /// <summary>
+    /// Возвращает TRUE, если сделка в LONG
+    /// </summary>
     public bool IsLong
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Направление сделки
+    /// </summary>
     public Direction DirectionEnum
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Направление сделки
+    /// </summary>
     public string DirectionStr
     {
         get
@@ -34,59 +48,74 @@ public class Deal
             return "";
         }
     }
+    /// <summary>
+    /// Дата открытия сделки
+    /// </summary>
     public DateTime OpenDate
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Дата закрытия сделки
+    /// </summary>
     public DateTime CloseDate
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Цена входа
+    /// </summary>
     public double? OpenValue
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Цена выхода
+    /// </summary>
     public double? CloseValue
     {
         get;
         private set;
     }
+    /// <summary>
+    /// Прибыль в процентах
+    /// </summary>
     public double? ProfitProcent
     {
         get
         {
-            int directCoef = 1;
+            int directCoef = -1;
             if (IsLong)
             {
-                directCoef = -1;
+                directCoef = 1;
             }
             double? profitProcentNul = (CloseValue - OpenValue) * directCoef * 100 / OpenValue;
             return Math.Round((double)profitProcentNul, 2);
         }
     }
+    /// <summary>
+    /// Прибыль в процентах
+    /// </summary>
     public string ProfitProcentStr
     {
         get
         {
-            int directCoef = 1;
-            if (!IsLong)
-            {
-                directCoef = -1;
-            }
-            double? profitProcentNul = (CloseValue - OpenValue) * directCoef * 100 / OpenValue;
+            double? profitProcentNul = ProfitProcent;
             char c = '+';
             if (profitProcentNul < 0)
             {
                 c = '-';
             }
-            double profitProcent = Math.Round(Math.Abs((double)profitProcentNul), 2);
+            double profitProcent = Math.Abs((double)profitProcentNul);
             return profitProcent.ToString() + c;
         }
     }
-
+    /// <summary>
+    /// Перевороты, которые ставились во время жизни сделки
+    /// </summary>
     public Dictionary <DateTime, double?> Stops
     {
         get { return _stops; }
@@ -97,6 +126,12 @@ public class Deal
     private const string LongTitle = "ЛOHГ";
     private const string ShortTitle = "ШOPT";
 
+    /// <summary>
+    /// Конструктор для создания сделки
+    /// </summary>
+    /// <param name="isLong">TRUE, если сделка ЛОНГ</param>
+    /// <param name="openDate">Дата открытия сделки</param>
+    /// <param name="openValue">Цена открытия</param>
     public Deal(bool isLong, DateTime openDate, double? openValue) 
         : this (openDate, openValue)
     {
@@ -110,7 +145,12 @@ public class Deal
             DirectionEnum = Direction.Short;
         }
     }
-
+    /// <summary>
+    /// Конструктор для создания сделки
+    /// </summary>
+    /// <param name="direction">Направление сделки</param>
+    /// <param name="openDate">Дата открытия сделки</param>
+    /// <param name="openValue">Цена открытия</param>
     public Deal(string direction, DateTime openDate, double? openValue)
         : this(openDate, openValue)
     {
@@ -123,7 +163,11 @@ public class Deal
         OpenValue = openValue;
         _stops = new Dictionary<DateTime, double?>();
     }
-
+    /// <summary>
+    /// Метод устанавливает новый стоп (переворот)
+    /// </summary>
+    /// <param name="date"></param>
+    /// <param name="stopValue"></param>
     public void SetStopReverse(DateTime date, double? stopValue)
     {
         if (!_stops.ContainsKey(date))
@@ -131,7 +175,11 @@ public class Deal
             _stops.Add(date, stopValue);
         }
     }
-
+    /// <summary>
+    /// Метод возвращает TRUE, если направление текущей сделки совпадает с передаваемым
+    /// </summary>
+    /// <param name="directionTitle">Направление сделки</param>
+    /// <returns></returns>
     public bool IsSameDirection(string directionTitle)
     {
         string title = StringFunctions.GetClearlyDefinedString(directionTitle.Trim());
@@ -145,19 +193,32 @@ public class Deal
         }
         return false;
     }
-
+    /// <summary>
+    /// Метод закрывает сделку
+    /// </summary>
+    /// <param name="closeDate">Дата закрытия</param>
+    /// <param name="closeValue">Цена закрытия</param>
     public void Close(DateTime closeDate, double? closeValue)
     {
         CloseDate = closeDate;
         CloseValue = closeValue;
     }
-
+    /// <summary>
+    /// Метод проводит переворот сделки - закрывает текущую, открывает новую в обратном направлении и отдает её на выходе
+    /// </summary>
+    /// <param name="closeDate">Дата закрытия</param>
+    /// <param name="closeValue">Цена закрытия</param>
+    /// <returns></returns>
     public Deal Reverse(DateTime closeDate, double? closeValue)
     {
         Close(closeDate, closeValue);
         return new Deal(!IsLong, closeDate, closeValue);
     }
-
+    /// <summary>
+    /// Возвращает значение стопа (переворота) на определённую дату
+    /// </summary>
+    /// <param name="date"></param>
+    /// <returns></returns>
     public double? GetStop(DateTime date)
     {
         if (_stops.ContainsKey(date))

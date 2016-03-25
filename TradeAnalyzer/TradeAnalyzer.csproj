@@ -89,6 +89,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Deal.cs" />
+    <Compile Include="DealDataViewer.cs" />
     <Compile Include="ExcelClass.cs" />
     <Compile Include="Quote.cs" />
     <Compile Include="StatisticsFiles.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -10,7 +11,7 @@ namespace TradeAnalyzer
     {
         private static readonly List <string> Files;
 
-        private static List <TradeInstrument> issuers; 
+        private static List <TradeInstrument> _issuers; 
 
         static StatisticsFiles()
         {
@@ -39,18 +40,36 @@ namespace TradeAnalyzer
             string exePath = Assembly.GetExecutingAssembly().Location;
             string folder = Path.GetDirectoryName(exePath);
             string[] files = Directory.GetFiles(folder, "*.xls");
-            issuers = new List <TradeInstrument>();
+            _issuers = new List <TradeInstrument>();
             foreach (string file in files)
             {
-                issuers.Add(new TradeInstrument(file));
+                _issuers.Add(new TradeInstrument(file));
             }
             List <string> issuerNames = new List <string>();
-            foreach (TradeInstrument issuer in issuers)
+            foreach (TradeInstrument issuer in _issuers)
             {
                 issuerNames.Add(issuer.Name);
             }
             issuerNames.Sort();
             return issuerNames;
+        }
+
+        public static void GetDeals(string tradeInstrumentName)
+        {
+            GetRomanDeals(tradeInstrumentName);
+        }
+
+        public static Dictionary<DateTime, Deal> GetRomanDeals(string tradeInstrumentName)
+        {
+            foreach (TradeInstrument tradeInstrument in _issuers)
+            {
+                if (tradeInstrument.Name == tradeInstrumentName)
+                {
+                    tradeInstrument.ReadAllDeals();
+                    return tradeInstrument.GetAllDeals();
+                }
+            }
+            return null;
         }
 
         private static bool SetFiles()

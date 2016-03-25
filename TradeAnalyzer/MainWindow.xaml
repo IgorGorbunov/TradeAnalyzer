@@ -2,8 +2,10 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit" x:Class="TradeAnalyzer.MainWindow"
-        Title="MainWindow" Height="392" Width="895" WindowStartupLocation="CenterScreen" MinWidth="525" MinHeight="350" Loaded="Window_Loaded_1">
-
+        Title="MainWindow" Height="152" Width="548" WindowStartupLocation="CenterScreen" MinWidth="900" MinHeight="350" Loaded="Window_Loaded_1">
+    <Window.Resources>
+        <CollectionViewSource x:Key="ItemCollectionViewSource"  CollectionViewType="ListCollectionView"/>
+    </Window.Resources>
     <DockPanel Margin="0" Grid.Column="2">
         <StatusBar Height="0" VerticalAlignment="Top" DockPanel.Dock="Bottom" Margin="0"/>
         <Menu Height="22" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0">
@@ -12,22 +14,44 @@
         <StackPanel Width="164">
             <Button x:Name="BCheck" Content="Выполнить проверку" VerticalAlignment="Center" Width="134" Click="BCheck_Click" Margin="0,10,0,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
             <Label Content="Выберите инструмент" Margin="10,10,10,0"/>
-            <ComboBox x:Name="cbInstrs" Margin="10,0"/>
+            <ComboBox x:Name="cbInstrs" Margin="10,0" SelectionChanged="cbInstrs_SelectionChanged"/>
             <Label Content="Срок просмотра" Margin="10,10,0,0"/>
             <ComboBox Margin="10,0,10,10"/>
         </StackPanel>
-        <Grid Width="240" DockPanel.Dock="Right" Margin="0,0,0,0" HorizontalAlignment="Right">
+        <Grid Width="420" DockPanel.Dock="Right" Margin="0,0,0,0" HorizontalAlignment="Right">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <DockPanel>
                 <Label Content="Сделки Романа Андреева" Margin="0" VerticalAlignment="Top" DockPanel.Dock="Top" HorizontalContentAlignment="Stretch"/>
-                <DataGrid HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                <DataGrid x:Name="DgRomanDeals" DataContext="{StaticResource ItemCollectionViewSource}" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата отк" Binding="{Binding Path=OpenDate}"/>
+                        <DataGridTextColumn Header="Цена вх" Binding="{Binding Path=OpenValue}"/>
+                        <DataGridCheckBoxColumn Header="Лонг" Binding="{Binding Path=IsLong}"/>
+                        <DataGridTextColumn Header="Дата зак" Binding="{Binding Path=CloseDate}"/>
+                        <DataGridTextColumn Header="Цена вы" Binding="{Binding Path=CloseValue}"/>
+                        <DataGridTextColumn Header="Длит" Binding="{Binding Path=Duration}"/>
+                        <DataGridTextColumn Header="Доход" Binding="{Binding Path=Profit}"/>
+                        <DataGridTextColumn Header="Доход с ком" Binding="{Binding Path=ProfitComis}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
             <DockPanel Grid.Row="1">
                 <Label Content="Сделки со стопом на конец дня" VerticalAlignment="Top" DockPanel.Dock="Top"/>
-                <DataGrid VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"/>
+                <DataGrid VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Дата отк"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Цена вх"/>
+                        <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Лонг"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Дата зак"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Цена вы"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Длит"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Доход"/>
+                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Доход с ком"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
     </Grid>
         <chartingToolkit:Chart x:Name="chartProfitness" Margin="0,0,0,0" Title="Chart Title" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">

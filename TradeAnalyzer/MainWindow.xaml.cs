@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -21,11 +23,40 @@ namespace TradeAnalyzer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public DataTable dealsCollection;
+
+
         public MainWindow()
         {
             InitializeComponent();
             
         }
+
+        private void SetRomanDeals(string tradeInstrumentName)
+        {
+            Dictionary<DateTime, Deal> romanDeals = StatisticsFiles.GetRomanDeals(tradeInstrumentName);
+            List <DealDataViewer> deals = new List <DealDataViewer>();
+            foreach (KeyValuePair <DateTime, Deal> dealPair in romanDeals)
+            {
+                DealDataViewer dealParams = new DealDataViewer();
+                dealParams.OpenDate = dealPair.Key.ToShortDateString();
+                Deal deal = dealPair.Value;
+                dealParams.OpenValue = deal.OpenValue;
+                dealParams.IsLong = deal.IsLong;
+                dealParams.CloseDate = deal.CloseDate.ToShortDateString();
+                dealParams.CloseValue = deal.CloseValue;
+                TimeSpan dur = deal.CloseDate - deal.OpenDate;
+                dealParams.Duration = dur.Days;
+                dealParams.Profit = deal.ProfitProcent;
+                dealParams.ProfitComis = 0.0;
+                deals.Add(dealParams);
+            }
+            CollectionViewSource itemCollectionViewSource = (CollectionViewSource)(FindResource("ItemCollectionViewSource"));
+            itemCollectionViewSource.Source = deals;
+            //DgRomanDeals.ItemsSource = deals;
+        }
+
+        //---------------------------------------------------------------------------------
 
         private void miHelp_Click(object sender, RoutedEventArgs e)
         {
@@ -44,6 +75,11 @@ namespace TradeAnalyzer
             {
                 cbInstrs.Items.Add(issuerName);
             }
+        }
+
+        private void cbInstrs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetRomanDeals(cbInstrs.SelectedValue.ToString());
         }
 
     }

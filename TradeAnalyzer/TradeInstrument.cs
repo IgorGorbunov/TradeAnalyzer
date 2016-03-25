@@ -352,6 +352,11 @@ public class TradeInstrument
         }
     }
 
+    public Dictionary<DateTime, Deal> GetAllDeals()
+    {
+        return _deals;
+    }
+
     public void WriteAllDeals()
     {
         using (ExcelClass xls = new ExcelClass())
