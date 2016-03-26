@@ -7,7 +7,8 @@
         x:Class="TradeAnalyzer.MainWindow"
         Title="MainWindow" Height="152" Width="548" WindowStartupLocation="CenterScreen" MinWidth="900" MinHeight="350" Loaded="Window_Loaded_1">
     <Window.Resources>
-        <CollectionViewSource x:Key="ItemCollectionViewSource"  CollectionViewType="ListCollectionView"/>
+        <CollectionViewSource x:Key="ItemCollectionViewSourceRoman"  CollectionViewType="ListCollectionView"/>
+        <CollectionViewSource x:Key="ItemCollectionViewSourceSimple"  CollectionViewType="ListCollectionView"/>
     </Window.Resources>
 
     <DockPanel Margin="0" Grid.Column="2">
@@ -33,7 +34,7 @@
             </Grid.RowDefinitions>
             <DockPanel>
                 <Label Content="Сделки Романа Андреева" Margin="0" VerticalAlignment="Top" DockPanel.Dock="Top" HorizontalContentAlignment="Stretch"/>
-                <DataGrid x:Name="DgRomanDeals" DataContext="{StaticResource ItemCollectionViewSource}" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" >
+                <DataGrid x:Name="DgRomanDeals" DataContext="{StaticResource ItemCollectionViewSourceRoman}" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Дата отк" Binding="{Binding Path=OpenDate}"/>
                         <DataGridTextColumn Header="Цена вх" Binding="{Binding Path=OpenValue}"/>
@@ -48,16 +49,16 @@
             </DockPanel>
             <DockPanel Grid.Row="1">
                 <Label Content="Сделки со стопом на конец дня" VerticalAlignment="Top" DockPanel.Dock="Top"/>
-                <DataGrid VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <DataGrid x:Name="DgSimpleDeals" DataContext="{StaticResource ItemCollectionViewSourceSimple}" ItemsSource="{Binding}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" IsReadOnly="True" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Дата отк"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Цена вх"/>
-                        <DataGridCheckBoxColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Лонг"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Дата зак"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Цена вы"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Длит"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Доход"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Доход с ком"/>
+                        <DataGridTextColumn Header="Дата отк" Binding="{Binding Path=OpenDate}"/>
+                        <DataGridTextColumn Header="Цена вх" Binding="{Binding Path=OpenValue}"/>
+                        <DataGridCheckBoxColumn Header="Лонг" Binding="{Binding Path=IsLong}"/>
+                        <DataGridTextColumn Header="Дата зак" Binding="{Binding Path=CloseDate}"/>
+                        <DataGridTextColumn Header="Цена вы" Binding="{Binding Path=CloseValue}"/>
+                        <DataGridTextColumn Header="Длит" Binding="{Binding Path=Duration}"/>
+                        <DataGridTextColumn Header="Доход" Binding="{Binding Path=Profit}"/>
+                        <DataGridTextColumn Header="Доход с ком" Binding="{Binding Path=ProfitComis}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
@@ -89,10 +90,10 @@
                 </ControlTemplate>
             </chartingToolkit:Chart.Resources>
             <chartingToolkit:Chart.Series>
-                <chartingToolkit:LineSeries Title="Доходность Романа" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}">
-                </chartingToolkit:LineSeries>
-                <chartingToolkit:LineSeries Title="Доходность Романа c комиссией" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}">
-                </chartingToolkit:LineSeries>
+                <chartingToolkit:LineSeries Title="Доходность Романа" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}"/>
+                <chartingToolkit:LineSeries Title="Доходность Романа c комиссией" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}"/>
+                <chartingToolkit:LineSeries Title="Доходность простая" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}"/>
+                <chartingToolkit:LineSeries Title="Доходность простая c комиссией" IndependentValueBinding="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}"/>
             </chartingToolkit:Chart.Series>
         </chartingToolkit:Chart>
         

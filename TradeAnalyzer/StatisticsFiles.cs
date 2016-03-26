@@ -27,7 +27,7 @@ namespace TradeAnalyzer
                 {
                     TradeInstrument instrument = new TradeInstrument(file);
                     instrument.ReadAllQuotes();
-                    instrument.ReadAllDeals();
+                    instrument.ReadAllRomanDeals();
                     instrument.WriteAllDeals();
                     instrument.WriteSimpleDeals();
                 }
@@ -54,10 +54,6 @@ namespace TradeAnalyzer
             return issuerNames;
         }
 
-        public static void GetDeals(string tradeInstrumentName)
-        {
-            GetRomanDeals(tradeInstrumentName);
-        }
 
         public static Dictionary<DateTime, Deal> GetRomanDeals(string tradeInstrumentName)
         {
@@ -65,8 +61,21 @@ namespace TradeAnalyzer
             {
                 if (tradeInstrument.Name == tradeInstrumentName)
                 {
-                    tradeInstrument.ReadAllDeals();
-                    return tradeInstrument.GetAllDeals();
+                    tradeInstrument.ReadAllRomanDeals();
+                    return tradeInstrument.GetAllRomanDeals();
+                }
+            }
+            return null;
+        }
+
+        public static Dictionary<DateTime, Deal> GetSimpleDeals(string tradeInstrumentName)
+        {
+            foreach (TradeInstrument tradeInstrument in _issuers)
+            {
+                if (tradeInstrument.Name == tradeInstrumentName)
+                {
+                    tradeInstrument.ReadAllSimpleDeals();
+                    return tradeInstrument.GetAllSimpleDeals();
                 }
             }
             return null;

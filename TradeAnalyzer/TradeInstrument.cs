@@ -286,75 +286,28 @@ public class TradeInstrument
         }
     }
 
-    public void ReadAllDeals()
+    public void ReadAllRomanDeals()
     {
         DateTime fDateTime = new DateTime(1, 1, 1);
         DateTime tDateTime = DateTime.Today;
-        ReadDeals(fDateTime, tDateTime);
+        ReadRomanDeals(fDateTime, tDateTime);
     }
 
-    public void ReadDeals(DateTime fromDate, DateTime toDate)
+    public void ReadAllSimpleDeals()
     {
-        using (ExcelClass xls = new ExcelClass())
-        {
-            try
-            {
-                _deals = new Dictionary<DateTime, Deal>();
-                xls.OpenDocument(_quotesFileName, false);
-                string sDate = xls.GetCellStringValue(DateCol, FirstRow);
-                int i = FirstRow;
-                Deal deal = null;
-                bool isFirstDeal = true;
-                while (!string.IsNullOrEmpty(sDate))
-                {
-                    DateTime date = StringFunctions.GetDate(sDate, DateFormat);
-                    if (date > fromDate && date < toDate)
-                    {
-                        string sDir = xls.GetCellStringValue(DirectionDealCol, i);
-                        string sOpen = xls.GetCellStringValue(OpenDealCol, i);
-                        string sReverse = xls.GetCellStringValue(ReverseDealCol, i);
-                        if (!string.IsNullOrEmpty(sDir) &&
-                            !string.IsNullOrEmpty(sOpen) &&
-                            !string.IsNullOrEmpty(sReverse))
-                        {
-                            double? reverse = StringFunctions.TryParse(sReverse);
-                            if (isFirstDeal)
-                            {
-                                double? open = StringFunctions.TryParse(sOpen);
-                                deal = new Deal(sDir, date.AddDays(-1), open);
-                                deal.SetStopReverse(date, reverse);
-                                isFirstDeal = false;
-                            }
-                            else
-                            {
-                                if (deal.IsSameDirection(sDir))
-                                {
-                                    deal.SetStopReverse(date, reverse);
-                                }
-                                else
-                                {
-                                    double? open = StringFunctions.TryParse(sOpen);
-                                    _deals.Add(deal.OpenDate, deal);
-                                    deal = deal.Reverse(date.AddDays(-1), open);
-                                    deal.SetStopReverse(date, reverse);
-                                }
-                            }
-                        }
-                    }
-                    i++;
-                    sDate = xls.GetCellStringValue(DateCol, i);
-                }
-            }
-            finally
-            {
-                xls.CloseDocument(false);
-            }
-        }
+        DateTime fDateTime = new DateTime(1, 1, 1);
+        DateTime tDateTime = DateTime.Today;
+        ReadSimpleDeals(fDateTime, tDateTime);
     }
 
-    public Dictionary<DateTime, Deal> GetAllDeals()
+    public Dictionary<DateTime, Deal> GetAllRomanDeals()
     {
         return _deals;
+    }
+
+    public Dictionary<DateTime, Deal> GetAllSimpleDeals()
+    {
+        return _simpleDeals;
     }
 
     public void WriteAllDeals()
@@ -365,7 +318,7 @@ public class TradeInstrument
             {
                 xls.OpenDocument(_quotesFileName, false);
                 int i = FirstRow;
-                foreach (KeyValuePair <DateTime, Deal> pair in _deals)
+                foreach (KeyValuePair<DateTime, Deal> pair in _deals)
                 {
                     string sDate = xls.GetCellStringValue(DateCol, i);
                     while (!string.IsNullOrEmpty(sDate))
@@ -410,7 +363,7 @@ public class TradeInstrument
                 double? lastStop = 0;
                 DateTime prevDay = new DateTime(1, 1, 1);
 
-                foreach (KeyValuePair <DateTime, Quote> quote in _quotes)
+                foreach (KeyValuePair<DateTime, Quote> quote in _quotes)
                 {
                     DateTime date = quote.Key;
                     if (!isCurrentDeal)
@@ -420,7 +373,7 @@ public class TradeInstrument
                             prevDay = date;
                             continue;
                         }
-                            
+
 
                         romanDeal = _deals[prevDay];
                         isCurrentDeal = true;
@@ -470,6 +423,75 @@ public class TradeInstrument
             finally
             {
                 xls.CloseDocumentSave();
+            }
+        }
+    }
+
+    private void ReadRomanDeals(DateTime fromDate, DateTime toDate)
+    {
+        ReadDeals(ref _deals, fromDate, toDate, DirectionDealCol, OpenDealCol, ReverseDealCol);
+    }
+
+    private void ReadSimpleDeals(DateTime fromDate, DateTime toDate)
+    {
+        ReadDeals(ref _simpleDeals, fromDate, toDate, SimpleDirectionDealCol, SimpleOpenDealCol, SimpleReverseDealCol);
+    }
+
+    private void ReadDeals(ref Dictionary<DateTime, Deal> someDeals, DateTime fromDate, DateTime toDate, string directionDealCol, string openDealCol, string reverseDealCol)
+    {
+        using (ExcelClass xls = new ExcelClass())
+        {
+            try
+            {
+                someDeals = new Dictionary<DateTime, Deal>();
+                xls.OpenDocument(_quotesFileName, false);
+                string sDate = xls.GetCellStringValue(DateCol, FirstRow);
+                int i = FirstRow;
+                Deal deal = null;
+                bool isFirstDeal = true;
+                while (!string.IsNullOrEmpty(sDate))
+                {
+                    DateTime date = StringFunctions.GetDate(sDate, DateFormat);
+                    if (date > fromDate && date < toDate)
+                    {
+                        string sDir = xls.GetCellStringValue(directionDealCol, i);
+                        string sOpen = xls.GetCellStringValue(openDealCol, i);
+                        string sReverse = xls.GetCellStringValue(reverseDealCol, i);
+                        if (!string.IsNullOrEmpty(sDir) &&
+                            !string.IsNullOrEmpty(sOpen) &&
+                            !string.IsNullOrEmpty(sReverse))
+                        {
+                            double? reverse = StringFunctions.TryParse(sReverse);
+                            if (isFirstDeal)
+                            {
+                                double? open = StringFunctions.TryParse(sOpen);
+                                deal = new Deal(sDir, date.AddDays(-1), open);
+                                deal.SetStopReverse(date, reverse);
+                                isFirstDeal = false;
+                            }
+                            else
+                            {
+                                if (deal.IsSameDirection(sDir))
+                                {
+                                    deal.SetStopReverse(date, reverse);
+                                }
+                                else
+                                {
+                                    double? open = StringFunctions.TryParse(sOpen);
+                                    someDeals.Add(deal.OpenDate, deal);
+                                    deal = deal.Reverse(date.AddDays(-1), open);
+                                    deal.SetStopReverse(date, reverse);
+                                }
+                            }
+                        }
+                    }
+                    i++;
+                    sDate = xls.GetCellStringValue(DateCol, i);
+                }
+            }
+            finally
+            {
+                xls.CloseDocument(false);
             }
         }
     }

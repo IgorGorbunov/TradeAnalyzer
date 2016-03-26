@@ -23,7 +23,7 @@ namespace TradeAnalyzer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Dictionary <DateTime, Deal> _romanDeals;
+        private Dictionary <DateTime, Deal> _romanDeals, _simpleDeals;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,8 +33,21 @@ namespace TradeAnalyzer
         private void SetRomanDeals(string tradeInstrumentName)
         {
             _romanDeals = StatisticsFiles.GetRomanDeals(tradeInstrumentName);
-            List <DealDataViewer> deals = new List <DealDataViewer>();
-            foreach (KeyValuePair<DateTime, Deal> dealPair in _romanDeals)
+            CollectionViewSource itemCollectionViewSource = (CollectionViewSource)(FindResource("ItemCollectionViewSourceRoman"));
+            SetDeals(_romanDeals, itemCollectionViewSource);
+        }
+
+        private void SetSimpleDeals(string tradeInstrumentName)
+        {
+            _simpleDeals = StatisticsFiles.GetSimpleDeals(tradeInstrumentName);
+            CollectionViewSource itemCollectionViewSource = (CollectionViewSource)(FindResource("ItemCollectionViewSourceSimple"));
+            SetDeals(_simpleDeals, itemCollectionViewSource);
+        }
+
+        private void SetDeals(Dictionary <DateTime, Deal> dealPairs, CollectionViewSource itemCollectionViewSource)
+        {
+            List<DealDataViewer> deals = new List<DealDataViewer>();
+            foreach (KeyValuePair<DateTime, Deal> dealPair in dealPairs)
             {
                 DealDataViewer dealParams = new DealDataViewer();
                 dealParams.OpenDate = dealPair.Key.ToShortDateString();
@@ -49,7 +62,6 @@ namespace TradeAnalyzer
                 dealParams.ProfitComis = deal.ProfitProcentWithCosts;
                 deals.Add(dealParams);
             }
-            CollectionViewSource itemCollectionViewSource = (CollectionViewSource)(FindResource("ItemCollectionViewSource"));
             itemCollectionViewSource.Source = deals;
         }
 
@@ -77,12 +89,15 @@ namespace TradeAnalyzer
         private void cbInstrs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetRomanDeals(CbInstrs.SelectedValue.ToString());
+            SetSimpleDeals(CbInstrs.SelectedValue.ToString());
         }
 
         private void CbDurationSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ((LineSeries)ChartProfitness.Series[0]).ItemsSource = null;
             ((LineSeries)ChartProfitness.Series[1]).ItemsSource = null;
+            ((LineSeries)ChartProfitness.Series[2]).ItemsSource = null;
+            ((LineSeries)ChartProfitness.Series[3]).ItemsSource = null;
 
             Dictionary <DateTime, double> points = new Dictionary <DateTime, double>();
             double startValue = 100;
@@ -101,6 +116,24 @@ namespace TradeAnalyzer
                 points.Add(deal.Key, startValue);
             }
             ((LineSeries)ChartProfitness.Series[1]).ItemsSource = points;
+
+            points.Clear();
+            startValue = 100;
+            foreach (KeyValuePair<DateTime, Deal> deal in _simpleDeals)
+            {
+                startValue = startValue * deal.Value.ProfitProcent / 100 + startValue;
+                points.Add(deal.Key, startValue);
+            }
+            ((LineSeries)ChartProfitness.Series[2]).ItemsSource = points;
+
+            points.Clear();
+            startValue = 100;
+            foreach (KeyValuePair<DateTime, Deal> deal in _simpleDeals)
+            {
+                startValue = startValue * deal.Value.ProfitProcentWithCosts / 100 + startValue;
+                points.Add(deal.Key, startValue);
+            }
+            ((LineSeries)ChartProfitness.Series[3]).ItemsSource = points;
         }
 
 
